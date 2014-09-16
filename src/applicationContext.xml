@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	spring配置文件
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=UTF-8"/>
+		<property name="username" value="root"/>
+		<property name="password" value="root"/>
+		<property name="maxActive" value="100"/>
+		<property name="maxIdle" value="30"/>
+		<property name="maxWait" value="500"/>
+		<property name="defaultAutoCommit" value="true"/>
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<bean id="bookTypeDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.wangzhu.dao.BookTypeDao"></property>
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>	
+	</bean>
+	
+	<bean id="bookTypeService" class="com.wangzhu.service.impl.BookTypeServiceImpl">
+		<property name="bookTypeDao" ref="bookTypeDao"/>
+	</bean>
+	
+</beans>
